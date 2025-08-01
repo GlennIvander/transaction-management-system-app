@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account_number: MyText
+  account_holder: MyText
+  amount: 1.5
+  status: MyString
+
+two:
+  account_number: MyText
+  account_holder: MyText
+  amount: 1.5
+  status: MyString
