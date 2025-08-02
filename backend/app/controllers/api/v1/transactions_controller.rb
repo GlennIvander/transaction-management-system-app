@@ -1,8 +1,10 @@
+require "csv"
+
 class Api::V1::TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.all
+    @transactions = Transaction.order(created_at: :desc)
 
-    render json: { message: "Success", data: @transactions, count: @transactions.count }
+    render json: @transactions
   end
 
   def create
@@ -13,6 +15,16 @@ class Api::V1::TransactionsController < ApplicationController
     else
       render json: @transaction.errors, status: :unprocessable_entity
     end
+  end
+
+  def import
+    if params[:file].blank?
+      redirect_to transactions_path, alert: "No file selected."
+      return
+    end
+
+    Topic.import(params[:file])
+    redirect_to transactions_path, notice: "Topics Data imported"
   end
 
   private
