@@ -1,6 +1,8 @@
 require "csv"
 
 class Api::V1::TransactionsController < ApplicationController
+
+
   def index
     @transactions = Transaction.order(created_at: :desc)
 
@@ -23,13 +25,14 @@ class Api::V1::TransactionsController < ApplicationController
       return
     end
 
-    Topic.import(params[:file])
-    redirect_to transactions_path, notice: "Topics Data imported"
+    Transaction.import(params[:file])
+    redirect_to transactions_path, notice: "Transaction Data imported"
   end
 
   private
 
   def transaction_params
-    params.require(:transaction).permit(:account_number, :account_holder, :amount, :status)
+    params.require(:transaction).permit(:account_number, :account_holder, :amount, :status, :transaction_date)
   end
+
 end

@@ -1,9 +1,11 @@
-require "csv"
+class Api::CsvImportsController < ActionController::Base
+  
 
-class Api::CsvImportsController < ApplicationController
   def create
     file = params[:file]
-    return render json: { error: 'No file uploaded' }, status: :unprocessable_entity unless file
+    unless file
+      return render json: { error: 'No file uploaded' }, status: :bad_request
+    end
 
     CSV.foreach(file.path, headers: true) do |row|
       Transaction.create!(
@@ -16,5 +18,7 @@ class Api::CsvImportsController < ApplicationController
     end
 
     render json: { message: 'CSV imported successfully' }, status: :ok
+  rescue => e
+    render json: { error: "Import failed: #{e.message}" }, status: :unprocessable_entity
   end
 end
